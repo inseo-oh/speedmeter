@@ -1,0 +1,41 @@
+/* Copyright 2024 Inseo Oh */
+
+.wrap {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background: #111;
+    color: rgb(231, 175, 0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column;
+    font-family: sans-serif;
+}
+
+.errbox {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    padding: 10px 0px;
+    text-align: center;
+    background: #dc0030;
+    color: #fff;
+    display: none;
+}
+
+.errbox .errtitle {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.latlong {
+    text-align: center;
+}
+
+.speedbox {
+    font-family: monospace;
+    font-size: 64px;
+    margin-bottom: 24px;
+}
