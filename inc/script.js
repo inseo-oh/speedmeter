@@ -13,7 +13,7 @@ function coordDiffInKm(a, b) {
     const vertKmDist = latDist * 110.574;
     const horiKmDist = longDist * (111.320 * Math.cos(lat * Math.PI));
     const dist = Math.sqrt(vertKmDist * vertKmDist + horiKmDist * horiKmDist);
-    return dist;
+    return Math.floor(dist * 10) / 10; // 소수점 첫째자리까지만
 }
 
 function success(pos) {
