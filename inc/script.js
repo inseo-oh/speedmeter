@@ -23,7 +23,7 @@ function success(pos) {
     if (oldCoords != undefined) {
         const dist = coordDiffInKm(oldCoords, currCoords);
         const timeDiff = currTime - oldTime; // 단위는 ms
-        const spd = (dist * 3600) / timeDiff;
+        const spd = (dist * (3600 * 1000)) / timeDiff;
         document.querySelector('.speed').innerText = spd;
     }
     oldCoords = currCoords;
