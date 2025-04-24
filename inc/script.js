@@ -111,19 +111,19 @@ window.onload = function () {
     var tsWrap = document.querySelector('.displayWrap .tsWrap');
     tsDisp = new SegmentDigitDisplay(tsWrap, 16);
     if (navigator.geolocation === undefined) {
-        cover.textContent = '브라우저 미지원 (Geolocation API 지원되지 않음)';
+        cover.textContent = 'Geolocation API is not supported by your browser';
         return;
     }
     var initWatch = function (alreadyGranted, notGrantedReason) {
         cover.textContent = '';
         if (!alreadyGranted) {
-            cover.textContent = '화면을 눌러 시작하기';
+            cover.textContent = 'Press screen to start';
             var reasonDiv = document.createElement('div');
             reasonDiv.setAttribute('class', 'reason');
             reasonDiv.textContent = notGrantedReason;
             cover.appendChild(reasonDiv);
             cover.onclick = function () {
-                cover.textContent = '위치 권한에 동의해주세요';
+                cover.textContent = 'Geolocation permission requested';
                 cover.onclick = undefined;
                 navigator.geolocation.watchPosition(onUpdate, onError);
             };
@@ -138,19 +138,21 @@ window.onload = function () {
                 if (result.state === 'granted') {
                     initWatch(true);
                 } else if (result.state == 'denied') {
-                    cover.textContent =
-                        '위치 권한 거부됨. 브라우저 설정을 확인해주세요.';
+                    cover.textContent = 'Geolocation permission denied';
                 } else if (result.state == 'prompt') {
-                    initWatch(false, '사용자 동의 필요함');
+                    initWatch(false, 'Geolocation permission needed');
                 } else {
-                    initWatch(false, '알 수 없는 권한 상태 "' + result.state);
+                    initWatch(
+                        false,
+                        'Unknown permission state "' + result.state
+                    );
                 }
             })
             .catch(function (e) {
-                initWatch(false, 'permission 상태 구할 수 없음: ' + e);
+                initWatch(false, 'permission state unknown: ' + e);
             });
     } else {
-        initWatch(false, 'permission API 미지원');
+        initWatch(false, 'permission API not supported');
     }
 };
 
@@ -188,10 +190,10 @@ function onUpdate(pos) {
 function onError(e) {
     if (!permissonOk) {
         // prettier-ignore
-        cover.textContent = '위치 가져오기 실패: ' + e.message + ' (코드 ' + e.code + '). 창 새로고침 후 다시 시도해주세요.';
+        cover.textContent = 'Failed to get location: ' + e.message + ' (Code ' + e.code + '). Refresh the page to try again.';
     } else {
         console.error(
-            '위치 가져오기 오류: ' + e.message + ' (코드 ' + e.code + ')'
+            'Failed to get location: ' + e.message + ' (Code ' + e.code + ')'
         );
     }
 }
