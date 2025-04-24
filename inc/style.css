@@ -131,6 +131,10 @@
     -moz-transform: rotate(90deg);
     -o-transform: rotate(90deg);
     transform: rotate(90deg);
+    -webkit-transform-origin: top left;
+    -moz-transform-origin: top left;
+    -o-transform-origin: top left;
+    transform-origin: top left;
 }
 .segmentBox img:nth-child(3),
 .segmentBox img:nth-child(5) {
