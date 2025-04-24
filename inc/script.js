@@ -90,7 +90,11 @@ class SegmentDigitDisplay {
         for (let i = 0; i < this.#digits.length; i++) {
             const srcIdx = s.length - 1 - i;
             const destIdx = this.#digits.length - 1 - i;
-            this.#digits[destIdx].setAttribute('data-num', s[srcIdx]);
+            if (s[srcIdx] === undefined) {
+                this.#digits[destIdx].removeAttribute('data-num');
+            } else {
+                this.#digits[destIdx].setAttribute('data-num', s[srcIdx]);
+            }
         }
     }
 }
@@ -99,32 +103,70 @@ let oldCoords, oldTime;
 let speedDisp, tsDisp;
 let speedSum = 0;
 let speedCnt = 0;
-let lastSpeed = 0;
+let cover;
+let permissonOk = false;
 
 window.onload = function () {
+    cover = document.querySelector('.cover');
     const speedWrap = document.querySelector('.displayWrap .speedWrap');
     speedDisp = new SegmentDigitDisplay(speedWrap, 3);
     const tsWrap = document.querySelector('.displayWrap .tsWrap');
     tsDisp = new SegmentDigitDisplay(tsWrap, 16);
-    navigator.geolocation.watchPosition(onUpdate, onError);
+    if (navigator.geolocation === undefined) {
+        cover.textContent = '브라우저 미지원 (Geolocation API 지원되지 않음)';
+        return;
+    }
+    const initWatch = (alreadyGranted) => {
+        cover.textContent = '';
+        if (!alreadyGranted) {
+            cover.textContent = '화면을 눌러 시작하기';
+            cover.onclick = () => {
+                cover.onclick = undefined;
+                navigator.geolocation.watchPosition(onUpdate, onError);
+            };
+        } else {
+            navigator.geolocation.watchPosition(onUpdate, onError);
+        }
+    };
+    if (navigator.permissions !== undefined) {
+        navigator.permissions
+            .query({ name: 'geolocation' })
+            .then((result) => {
+                if (result.state === 'granted') {
+                    initWatch(true);
+                } else if (result.state == 'denied') {
+                    cover.textContent =
+                        '위치 권한 거부됨. 브라우저 설정을 확인해주세요.';
+                } else {
+                    initWatch(false);
+                }
+            })
+            .catch((e) => {
+                console.error('permission 상태 구할 수 없음:', e);
+                initWatch(false);
+            });
+    }
+    // navigator.geolocation.watchPosition(onUpdate, onError);
 };
 
 setInterval(() => {
     if (speedDisp !== undefined) {
-        let avsSpd;
+        let avgSpd;
         if (speedCnt === 0) {
-            avsSpd = lastSpeed;
+            avgSpd = 0;
         } else {
-            avsSpd = Math.floor(speedSum / speedCnt);
-            lastSpeed = avsSpd;
+            avgSpd = Math.floor(speedSum / speedCnt);
         }
-        speedDisp.setText(avsSpd);
+        avgSpd = Math.min(avgSpd, 999);
+        speedDisp.setText(avgSpd);
         speedSum = 0;
         speedCnt = 0;
     }
 }, 1000);
 
 function onUpdate(pos) {
+    permissonOk = true;
+    cover.style.display = 'none';
     const currCoords = pos.coords;
     const currTime = pos.timestamp;
     tsDisp.setText(currTime.toString(16).padStart(16, '0'));
@@ -139,5 +181,9 @@ function onUpdate(pos) {
     oldTime = currTime;
 }
 function onError(e) {
-    alert(`오류: ${e.message} (Code ${e.code})`);
+    if (!permissonOk) {
+        cover.textContent = `위치 가져오기 실패: ${e.message} (코드 ${e.code}). 창 새로고침 후 다시 시도해주세요.`;
+    } else {
+        console.error(`위치 가져오기 오류: ${e.message} (Code ${e.code})`);
+    }
 }
