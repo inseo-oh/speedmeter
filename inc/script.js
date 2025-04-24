@@ -116,10 +116,14 @@ window.onload = function () {
         cover.textContent = '브라우저 미지원 (Geolocation API 지원되지 않음)';
         return;
     }
-    const initWatch = (alreadyGranted) => {
+    const initWatch = (alreadyGranted, notGrantedReason) => {
         cover.textContent = '';
         if (!alreadyGranted) {
             cover.textContent = '화면을 눌러 시작하기';
+            const reasonDiv = document.createElement('div');
+            reasonDiv.classList.add('reason');
+            reasonDiv.textContent = notGrantedReason;
+            cover.append(reasonDiv);
             cover.onclick = () => {
                 cover.onclick = undefined;
                 navigator.geolocation.watchPosition(onUpdate, onError);
@@ -137,16 +141,18 @@ window.onload = function () {
                 } else if (result.state == 'denied') {
                     cover.textContent =
                         '위치 권한 거부됨. 브라우저 설정을 확인해주세요.';
+                } else if (result.state == 'prompt') {
+                    initWatch(false, '사용자 동의 필요함');
                 } else {
-                    initWatch(false);
+                    initWatch(false, `알 수 없는 권한 상태 "${result.state}"`);
                 }
             })
             .catch((e) => {
-                console.error('permission 상태 구할 수 없음:', e);
-                initWatch(false);
+                initWatch(false, `permission 상태 구할 수 없음: "${e}"`);
             });
+    } else {
+        initWatch(false, `permission API 미지원`);
     }
-    // navigator.geolocation.watchPosition(onUpdate, onError);
 };
 
 setInterval(() => {
