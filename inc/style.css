@@ -17,15 +17,13 @@
     top: 0px;
     width: 100%;
     height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-flow: column;
+    padding-top: 50px;
     color: #fff;
     z-index: 10;
     font-size: 39px;
     line-height: 1.3;
     text-align: center;
+    word-break: keep-all;
 }
 .cover .reason {
     font-size: 18px;

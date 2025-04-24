@@ -11,39 +11,39 @@ function pow2(x) {
 
 function coordDiffInKm(a, b) {
     // 참고: https://www.movable-type.co.uk/scripts/latlong.html
-    const R = 6371; // 지구의 반지름
+    var R = 6371; // 지구의 반지름
     // 1. 두 위도값의 라디안 값을 구한다
-    const lat1$ = rad(a.latitude);
-    const lat2$ = rad(b.latitude);
+    var lat1$ = rad(a.latitude);
+    var lat2$ = rad(b.latitude);
     // 2. 위도, 경도의 차이를 구한다
-    const latDelta$ = rad(b.latitude - a.latitude);
-    const lonDelta$ = rad(b.longitude - a.longitude);
+    var latDelta$ = rad(b.latitude - a.latitude);
+    var lonDelta$ = rad(b.longitude - a.longitude);
     // 3. Haversine 식 적용
-    const alpha =
+    var alpha =
         pow2(Math.sin(latDelta$ / 2)) +
         Math.cos(lat1$) * Math.cos(lat2$) * pow2(Math.sin(lonDelta$ / 2));
-    const beta = 2 * Math.atan2(Math.sqrt(alpha), Math.sqrt(1 - alpha));
-    const dist = R * beta; // 거리 (미터)
+    var beta = 2 * Math.atan2(Math.sqrt(alpha), Math.sqrt(1 - alpha));
+    var dist = R * beta; // 거리 (미터)
     return dist;
 }
 
 function makeSegmentDigit() {
-    const thickness = 0.2;
-    const length = 100;
-    const canvas = document.createElement('canvas');
+    var thickness = 0.2;
+    var length = 100;
+    var canvas = document.createElement('canvas');
     canvas.width = length;
     canvas.height = length * thickness;
-    const ctx = canvas.getContext('2d');
+    var ctx = canvas.getContext('2d');
 
     ctx.beginPath();
-    const middleLength = length - canvas.height; // 양쪽 <> 구간을 제외한 나머지 너비
-    const midLeftX = canvas.height / 2;
-    const midRightX = midLeftX + middleLength;
-    const leftX = 0;
-    const rightX = length;
-    const topY = 0;
-    const midY = canvas.height / 2;
-    const botY = canvas.height;
+    var middleLength = length - canvas.height; // 양쪽 <> 구간을 제외한 나머지 너비
+    var midLeftX = canvas.height / 2;
+    var midRightX = midLeftX + middleLength;
+    var leftX = 0;
+    var rightX = length;
+    var topY = 0;
+    var midY = canvas.height / 2;
+    var botY = canvas.height;
     //       (2)             (3)
     //       ________________
     //      /                \
@@ -61,70 +61,69 @@ function makeSegmentDigit() {
     ctx.fillStyle = '#493700';
     ctx.fill();
 
-    const url = canvas.toDataURL();
-    const box = document.createElement('div');
-    box.classList.add('segmentBox');
-    for (let i = 0; i < 7; i++) {
-        const img = document.createElement('img');
+    var url = canvas.toDataURL();
+    var box = document.createElement('div');
+    box.setAttribute('class', 'segmentBox');
+    for (var i = 0; i < 7; i++) {
+        var img = document.createElement('img');
         img.src = url;
-        box.append(img);
+        box.appendChild(img);
     }
     return box;
 }
 
-class SegmentDigitDisplay {
-    #digits = [];
-
-    constructor(wrap, len) {
-        const innerWrap = document.createElement('div');
-        innerWrap.classList.add('segmentWrap');
-        for (let i = 0; i < len; i++) {
-            this.#digits.push(makeSegmentDigit());
-        }
-        innerWrap.append(...this.#digits);
-        wrap.append(innerWrap);
+function SegmentDigitDisplay(wrap, len) {
+    var digits = [];
+    var innerWrap = document.createElement('div');
+    innerWrap.setAttribute('class', 'segmentWrap');
+    for (var i = 0; i < len; i++) {
+        var digit = makeSegmentDigit();
+        digits.push(digit);
+        innerWrap.appendChild(digit);
     }
+    wrap.appendChild(innerWrap);
 
-    setText(txt) {
-        const s = txt.toString();
-        for (let i = 0; i < this.#digits.length; i++) {
-            const srcIdx = s.length - 1 - i;
-            const destIdx = this.#digits.length - 1 - i;
+    this.setText = function (txt) {
+        var s = txt.toString();
+        for (var i = 0; i < digits.length; i++) {
+            var srcIdx = s.length - 1 - i;
+            var destIdx = digits.length - 1 - i;
             if (s[srcIdx] === undefined) {
-                this.#digits[destIdx].removeAttribute('data-num');
+                digits[destIdx].removeAttribute('data-num');
             } else {
-                this.#digits[destIdx].setAttribute('data-num', s[srcIdx]);
+                digits[destIdx].setAttribute('data-num', s[srcIdx]);
             }
         }
-    }
+    };
 }
 
-let oldCoords, oldTime;
-let speedDisp, tsDisp;
-let speedSum = 0;
-let speedCnt = 0;
-let cover;
-let permissonOk = false;
+var oldCoords, oldTime;
+var speedDisp, tsDisp;
+var speedSum = 0;
+var speedCnt = 0;
+var cover;
+var permissonOk = false;
 
 window.onload = function () {
     cover = document.querySelector('.cover');
-    const speedWrap = document.querySelector('.displayWrap .speedWrap');
+    var speedWrap = document.querySelector('.displayWrap .speedWrap');
     speedDisp = new SegmentDigitDisplay(speedWrap, 3);
-    const tsWrap = document.querySelector('.displayWrap .tsWrap');
+    var tsWrap = document.querySelector('.displayWrap .tsWrap');
     tsDisp = new SegmentDigitDisplay(tsWrap, 16);
     if (navigator.geolocation === undefined) {
         cover.textContent = '브라우저 미지원 (Geolocation API 지원되지 않음)';
         return;
     }
-    const initWatch = (alreadyGranted, notGrantedReason) => {
+    var initWatch = function (alreadyGranted, notGrantedReason) {
         cover.textContent = '';
         if (!alreadyGranted) {
             cover.textContent = '화면을 눌러 시작하기';
-            const reasonDiv = document.createElement('div');
-            reasonDiv.classList.add('reason');
+            var reasonDiv = document.createElement('div');
+            reasonDiv.setAttribute('class', 'reason');
             reasonDiv.textContent = notGrantedReason;
-            cover.append(reasonDiv);
-            cover.onclick = () => {
+            cover.appendChild(reasonDiv);
+            cover.onclick = function () {
+                cover.textContent = '위치 권한에 동의해주세요';
                 cover.onclick = undefined;
                 navigator.geolocation.watchPosition(onUpdate, onError);
             };
@@ -135,7 +134,7 @@ window.onload = function () {
     if (navigator.permissions !== undefined) {
         navigator.permissions
             .query({ name: 'geolocation' })
-            .then((result) => {
+            .then(function (result) {
                 if (result.state === 'granted') {
                     initWatch(true);
                 } else if (result.state == 'denied') {
@@ -144,20 +143,20 @@ window.onload = function () {
                 } else if (result.state == 'prompt') {
                     initWatch(false, '사용자 동의 필요함');
                 } else {
-                    initWatch(false, `알 수 없는 권한 상태 "${result.state}"`);
+                    initWatch(false, '알 수 없는 권한 상태 "' + result.state);
                 }
             })
-            .catch((e) => {
-                initWatch(false, `permission 상태 구할 수 없음: "${e}"`);
+            .catch(function (e) {
+                initWatch(false, 'permission 상태 구할 수 없음: ' + e);
             });
     } else {
-        initWatch(false, `permission API 미지원`);
+        initWatch(false, 'permission API 미지원');
     }
 };
 
-setInterval(() => {
+setInterval(function () {
     if (speedDisp !== undefined) {
-        let avgSpd;
+        var avgSpd;
         if (speedCnt === 0) {
             avgSpd = 0;
         } else {
@@ -173,13 +172,13 @@ setInterval(() => {
 function onUpdate(pos) {
     permissonOk = true;
     cover.style.display = 'none';
-    const currCoords = pos.coords;
-    const currTime = pos.timestamp;
+    var currCoords = pos.coords;
+    var currTime = pos.timestamp;
     tsDisp.setText(currTime.toString(16).padStart(16, '0'));
     if (oldCoords !== undefined) {
-        const dist = coordDiffInKm(oldCoords, currCoords);
-        const timeDiff = currTime - oldTime; // 단위는 ms
-        const spd = (dist * (3600 * 1000)) / timeDiff;
+        var dist = coordDiffInKm(oldCoords, currCoords);
+        var timeDiff = currTime - oldTime; // 단위는 ms
+        var spd = (dist * (3600 * 1000)) / timeDiff;
         speedSum += spd;
         speedCnt++;
     }
@@ -188,8 +187,11 @@ function onUpdate(pos) {
 }
 function onError(e) {
     if (!permissonOk) {
-        cover.textContent = `위치 가져오기 실패: ${e.message} (코드 ${e.code}). 창 새로고침 후 다시 시도해주세요.`;
+        // prettier-ignore
+        cover.textContent = '위치 가져오기 실패: ' + e.message + ' (코드 ' + e.code + '). 창 새로고침 후 다시 시도해주세요.';
     } else {
-        console.error(`위치 가져오기 오류: ${e.message} (Code ${e.code})`);
+        console.error(
+            '위치 가져오기 오류: ' + e.message + ' (코드 ' + e.code + ')'
+        );
     }
 }
