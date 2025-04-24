@@ -123,7 +123,7 @@ window.onload = function () {
             reasonDiv.textContent = notGrantedReason;
             cover.appendChild(reasonDiv);
             cover.onclick = function () {
-                cover.textContent = 'Geolocation permission requested';
+                cover.textContent = 'Geolocation requested';
                 cover.onclick = undefined;
                 navigator.geolocation.watchPosition(onUpdate, onError);
             };
