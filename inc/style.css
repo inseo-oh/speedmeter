@@ -75,24 +75,27 @@
     left: 91px;
     top: 7px;
     transform: scale(0.4);
+    white-space: nowrap;
+    width: 440px;
 }
 
 .displayWrap .tsWrap .segmentWrap {
     left: 98px;
     top: 110px;
     transform: scale(0.1);
+    width: 2235px;
 }
 
 /*  */
 
 .segmentWrap {
     position: absolute;
-    display: flex;
-    flex-flow: row nowrap;
     transform-origin: top left;
 }
 .segmentBox {
     position: relative;
+    display: block;
+    float: left;
     width: 136px;
     height: 240px;
     transform: skewX(-10deg);
@@ -128,131 +131,99 @@
 }
 
 /* 0 */
-.segmentBox[data-num='0'] img:is(
-    :nth-child(1),
-    :nth-child(2),
-    :nth-child(3),
-    :nth-child(4),
-    :nth-child(5),
-    :nth-child(6),
-),
+.segmentBox[data-num='0'] img:nth-child(1),
+.segmentBox[data-num='0'] img:nth-child(2),
+.segmentBox[data-num='0'] img:nth-child(3),
+.segmentBox[data-num='0'] img:nth-child(4),
+.segmentBox[data-num='0'] img:nth-child(5),
+.segmentBox[data-num='0'] img:nth-child(6),
 /* 1 */
-.segmentBox[data-num='1'] img:is(
-    :nth-child(2),
-    :nth-child(3),
-),
+.segmentBox[data-num='1'] img:nth-child(2),
+.segmentBox[data-num='1'] img:nth-child(3),
 /* 2 */
-.segmentBox[data-num='2'] img:is(
-    :nth-child(1),
-    :nth-child(2),
-    :nth-child(4),
-    :nth-child(5),
-    :nth-child(7),
-),
+.segmentBox[data-num='2'] img:nth-child(1),
+.segmentBox[data-num='2'] img:nth-child(2),
+.segmentBox[data-num='2'] img:nth-child(4),
+.segmentBox[data-num='2'] img:nth-child(5),
+.segmentBox[data-num='2'] img:nth-child(7),
 /* 3 */
-.segmentBox[data-num='3'] img:is(
-    :nth-child(1),
-    :nth-child(2),
-    :nth-child(3),
-    :nth-child(4),
-    :nth-child(7),
-),
+.segmentBox[data-num='3'] img:nth-child(1),
+.segmentBox[data-num='3'] img:nth-child(2),
+.segmentBox[data-num='3'] img:nth-child(3),
+.segmentBox[data-num='3'] img:nth-child(4),
+.segmentBox[data-num='3'] img:nth-child(7),
 /* 4 */
-.segmentBox[data-num='4'] img:is(
-    :nth-child(2),
-    :nth-child(3),
-    :nth-child(6),
-    :nth-child(7),
-),
+.segmentBox[data-num='4'] img:nth-child(2),
+.segmentBox[data-num='4'] img:nth-child(3),
+.segmentBox[data-num='4'] img:nth-child(6),
+.segmentBox[data-num='4'] img:nth-child(7),
 /* 5 */
-.segmentBox[data-num='5'] img:is(
-    :nth-child(1),
-    :nth-child(3),
-    :nth-child(4),
-    :nth-child(6),
-    :nth-child(7),
-),
+.segmentBox[data-num='5'] img:nth-child(1),
+.segmentBox[data-num='5'] img:nth-child(3),
+.segmentBox[data-num='5'] img:nth-child(4),
+.segmentBox[data-num='5'] img:nth-child(6),
+.segmentBox[data-num='5'] img:nth-child(7),
 /* 6 */
-.segmentBox[data-num='6'] img:is(
-    :nth-child(1),
-    :nth-child(3),
-    :nth-child(4),
-    :nth-child(5),
-    :nth-child(6),
-    :nth-child(7),
-),
+.segmentBox[data-num='6'] img:nth-child(1),
+.segmentBox[data-num='6'] img:nth-child(3),
+.segmentBox[data-num='6'] img:nth-child(4),
+.segmentBox[data-num='6'] img:nth-child(5),
+.segmentBox[data-num='6'] img:nth-child(6),
+.segmentBox[data-num='6'] img:nth-child(7),
 /* 7 */
-.segmentBox[data-num='7'] img:is(
-    :nth-child(1),
-    :nth-child(2),
-    :nth-child(3),
-    :nth-child(6),
-),
+.segmentBox[data-num='7'] img:nth-child(1),
+.segmentBox[data-num='7'] img:nth-child(2),
+.segmentBox[data-num='7'] img:nth-child(3),
+.segmentBox[data-num='7'] img:nth-child(6),
 /* 8 */
-.segmentBox[data-num='8'] img:is(
-    :nth-child(1),
-    :nth-child(2),
-    :nth-child(3),
-    :nth-child(4),
-    :nth-child(5),
-    :nth-child(6),
-    :nth-child(7),
-),
+.segmentBox[data-num='8'] img:nth-child(1),
+.segmentBox[data-num='8'] img:nth-child(2),
+.segmentBox[data-num='8'] img:nth-child(3),
+.segmentBox[data-num='8'] img:nth-child(4),
+.segmentBox[data-num='8'] img:nth-child(5),
+.segmentBox[data-num='8'] img:nth-child(6),
+.segmentBox[data-num='8'] img:nth-child(7),
 /* 9 */
-.segmentBox[data-num='9'] img:is(
-    :nth-child(1),
-    :nth-child(2),
-    :nth-child(3),
-    :nth-child(4),
-    :nth-child(6),
-    :nth-child(7),
-),
+.segmentBox[data-num='9'] img:nth-child(1),
+.segmentBox[data-num='9'] img:nth-child(2),
+.segmentBox[data-num='9'] img:nth-child(3),
+.segmentBox[data-num='9'] img:nth-child(4),
+.segmentBox[data-num='9'] img:nth-child(6),
+.segmentBox[data-num='9'] img:nth-child(7),
 /* a */
-.segmentBox[data-num='a'] img:is(
-    :nth-child(1),
-    :nth-child(2),
-    :nth-child(3),
-    :nth-child(4),
-    :nth-child(5),
-    :nth-child(7),
-),
+.segmentBox[data-num='a'] img:nth-child(1),
+.segmentBox[data-num='a'] img:nth-child(2),
+.segmentBox[data-num='a'] img:nth-child(3),
+.segmentBox[data-num='a'] img:nth-child(4),
+.segmentBox[data-num='a'] img:nth-child(5),
+.segmentBox[data-num='a'] img:nth-child(7),
 /* b */
-.segmentBox[data-num='b'] img:is(
-    :nth-child(3),
-    :nth-child(4),
-    :nth-child(5),
-    :nth-child(6),
-    :nth-child(7),
-),
+.segmentBox[data-num='b'] img:nth-child(3),
+.segmentBox[data-num='b'] img:nth-child(4),
+.segmentBox[data-num='b'] img:nth-child(5),
+.segmentBox[data-num='b'] img:nth-child(6),
+.segmentBox[data-num='b'] img:nth-child(7),
 /* c */
-.segmentBox[data-num='c'] img:is(
-    :nth-child(4),
-    :nth-child(5),
-    :nth-child(7),
-),
+.segmentBox[data-num='c'] img:nth-child(4),
+.segmentBox[data-num='c'] img:nth-child(5),
+.segmentBox[data-num='c'] img:nth-child(7),
 /* d */
-.segmentBox[data-num='d'] img:is(
-    :nth-child(2),
-    :nth-child(3),
-    :nth-child(4),
-    :nth-child(5),
-    :nth-child(7),
-),
+.segmentBox[data-num='d'] img:nth-child(2),
+.segmentBox[data-num='d'] img:nth-child(3),
+.segmentBox[data-num='d'] img:nth-child(4),
+.segmentBox[data-num='d'] img:nth-child(5),
+.segmentBox[data-num='d'] img:nth-child(7),
 /* e */
-.segmentBox[data-num='e'] img:is(
-    :nth-child(1),
-    :nth-child(2),
-    :nth-child(4),
-    :nth-child(5),
-    :nth-child(6),
-    :nth-child(7),
-),
+.segmentBox[data-num='e'] img:nth-child(1),
+.segmentBox[data-num='e'] img:nth-child(2),
+.segmentBox[data-num='e'] img:nth-child(4),
+.segmentBox[data-num='e'] img:nth-child(5),
+.segmentBox[data-num='e'] img:nth-child(6),
+.segmentBox[data-num='e'] img:nth-child(7),
 /* f */
-.segmentBox[data-num='f'] img:is(
-    :nth-child(1),
-    :nth-child(5),
-    :nth-child(6),
-    :nth-child(7),
-) {
+.segmentBox[data-num='f'] img:nth-child(1),
+.segmentBox[data-num='f'] img:nth-child(5),
+.segmentBox[data-num='f'] img:nth-child(6),
+.segmentBox[data-num='f'] img:nth-child(7) {
     opacity: 1;
 }
