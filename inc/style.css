@@ -43,6 +43,9 @@
     position: absolute;
     left: 50%;
     top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
     background: #ffc100;
     width: 325px;
@@ -74,6 +77,9 @@
 .displayWrap .speedWrap .segmentWrap {
     left: 91px;
     top: 7px;
+    -webkit-transform: scale(0.4);
+    -moz-transform: scale(0.4);
+    -o-transform: scale(0.4);
     transform: scale(0.4);
     white-space: nowrap;
     width: 440px;
@@ -82,6 +88,9 @@
 .displayWrap .tsWrap .segmentWrap {
     left: 98px;
     top: 110px;
+    -webkit-transform: scale(0.1);
+    -moz-transform: scale(0.1);
+    -o-transform: scale(0.1);
     transform: scale(0.1);
     width: 2235px;
 }
@@ -101,6 +110,9 @@
     float: left;
     width: 136px;
     height: 240px;
+    -webkit-transform: skewX(-10deg);
+    -moz-transform: skewX(-10deg);
+    -o-transform: skewX(-10deg);
     transform: skewX(-10deg);
 }
 .segmentBox img {
@@ -115,8 +127,10 @@
 .segmentBox img:nth-child(6) {
     left: 124px;
     top: 14px;
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
     transform: rotate(90deg);
-    transform-origin: left top;
 }
 .segmentBox img:nth-child(3),
 .segmentBox img:nth-child(5) {
