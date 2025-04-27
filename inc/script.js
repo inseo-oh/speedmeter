@@ -99,8 +99,6 @@ function SegmentDigitDisplay(wrap, len) {
 
 var oldCoords, oldTime;
 var speedDisp, tsDisp;
-var speedSum = 0;
-var speedCnt = 0;
 var cover;
 var permissonOk = false;
 
@@ -156,18 +154,43 @@ window.onload = function () {
     }
 };
 
+
+var speedHistory = [];
+var expireTime = 10000;
+
 setInterval(function () {
-    if (speedDisp !== undefined) {
-        var avgSpd;
-        if (speedCnt === 0) {
-            avgSpd = 0;
-        } else {
-            avgSpd = Math.floor(speedSum / speedCnt);
+    // 가장 최근 시간 구함
+    var mostRecentTime = 0;
+    for (var i = 0; i < speedHistory.length; i++) {
+        mostRecentTime = Math.max(speedHistory[i].time);
+    }
+    // expireTime보다 지난 기록은 삭제
+    var removeIndices = [];
+    for (var i = 0; i < speedHistory.length; i++) {
+        var timeDiff = mostRecentTime - speedHistory[i].time;
+        if (expireTime < timeDiff) {
+            removeIndices.push(i);
         }
-        avgSpd = Math.min(avgSpd, 999);
-        speedDisp.setText(avgSpd);
-        speedSum = 0;
-        speedCnt = 0;
+    }
+    for (var i = 0; i < removeIndices.length; i++) {
+        speedHistory.splice(i, 1);
+    }
+    // history 바탕으로 평균 속도 추정
+    var distSum = 0;
+    var timeSum = 0;
+    for (var i = 0; i < speedHistory.length; i++) {
+        timeSum += speedHistory[i].timeDiff;
+        distSum += speedHistory[i].dist;
+    }
+    var spd;
+    if (timeSum === 0) {
+        spd = 0;   
+    } else {
+        spd = (distSum * (3600 * 1000)) / timeSum;
+    }
+    spd = Math.min(spd, 999);
+    if (speedDisp !== undefined) {
+        speedDisp.setText(spd);
     }
 }, 1000);
 
@@ -180,9 +203,7 @@ function onUpdate(pos) {
     if (oldCoords !== undefined) {
         var dist = coordDiffInKm(oldCoords, currCoords);
         var timeDiff = currTime - oldTime; // 단위는 ms
-        var spd = (dist * (3600 * 1000)) / timeDiff;
-        speedSum += spd;
-        speedCnt++;
+        speedHistory.push({time: currTime, timeDiff, dist});
     }
     oldCoords = currCoords;
     oldTime = currTime;
