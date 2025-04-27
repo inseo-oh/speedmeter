@@ -156,7 +156,7 @@ window.onload = function () {
 
 
 var speedHistory = [];
-var expireTime = 10000;
+var expireTime = 60000;
 
 setInterval(function () {
     // 가장 최근 시간 구함
