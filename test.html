@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button onclick="print();">PRINT</button><br/>
+    <textarea style="width: 90vw; height: 90vh;"></textarea>
+    <script>
+        var locations = [];
+        window.onload = () => {
+            navigator.geolocation.watchPosition(onUpdate, onError);
+        }
+        function onUpdate(pos) {
+            locations.push(pos);
+            console.log(locations);
+        }
+        function onError(e) {
+            console.error(
+                'Failed to get location: ' + e.message + ' (Code ' + e.code + ')'
+            );
+        }
+        function print() {
+            document.querySelector("textarea").textContent = JSON.stringify(locations);
+        }
+    </script>
+</body>
+</html>
