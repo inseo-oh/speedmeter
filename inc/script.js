@@ -113,6 +113,26 @@ window.onload = function () {
         return;
     }
     var initWatch = function (alreadyGranted, notGrantedReason) {
+        if (typeof testdata !== 'undefined') {
+            console.log('testdata is present. entering simulation mode');
+            (function () {
+                var testDataIdx = 0;
+                function timeoutCallback() {
+                    var currTime = testdata[testDataIdx].timestamp;
+                    onUpdate(testdata[testDataIdx]);
+                    if (testdata[testDataIdx + 1] === undefined) {
+                        return;
+                    }
+                    testDataIdx++;
+                    var nextTime = testdata[testDataIdx].timestamp;
+                    // setTimeout(nextTime - currTime, timeoutCallback);
+                    setTimeout(timeoutCallback, 100);
+                }
+                setTimeout(timeoutCallback, 0);
+            })();
+            return;
+        }
+
         cover.textContent = '';
         if (!alreadyGranted) {
             cover.textContent = 'Press screen to start';
@@ -154,7 +174,6 @@ window.onload = function () {
     }
 };
 
-
 var speedHistory = [];
 var expireTime = 60000;
 
@@ -184,11 +203,12 @@ setInterval(function () {
     }
     var spd;
     if (timeSum === 0) {
-        spd = 0;   
+        spd = 0;
     } else {
         spd = (distSum * (3600 * 1000)) / timeSum;
     }
     spd = Math.min(spd, 999);
+    spd = Math.floor(spd);
     if (speedDisp !== undefined) {
         speedDisp.setText(spd);
     }
@@ -200,13 +220,23 @@ function onUpdate(pos) {
     var currCoords = pos.coords;
     var currTime = pos.timestamp;
     tsDisp.setText(currTime.toString(16).padStart(16, '0'));
+    var saveCoords = false;
     if (oldCoords !== undefined) {
         var dist = coordDiffInKm(oldCoords, currCoords);
         var timeDiff = currTime - oldTime; // 단위는 ms
-        speedHistory.push({time: currTime, timeDiff, dist});
+        // 지난번 저장된것과 오차범위 밖이면 저장
+        if ((dist * 1000) > oldCoords.accuracy) {
+            saveCoords = true;
+            speedHistory.push({ time: currTime, timeDiff, dist });
+        }
+    } else {
+        saveCoords = true;
     }
-    oldCoords = currCoords;
-    oldTime = currTime;
+    // console.log(saveCoords);
+    if (saveCoords) {
+        oldCoords = currCoords;
+        oldTime = currTime;
+    }
 }
 function onError(e) {
     if (!permissonOk) {
